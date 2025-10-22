@@ -33,7 +33,12 @@ Manual steps (if you prefer to run commands yourself)
 
 5. Demonstrate RLS (explain that superuser bypasses RLS):
    # create test user and run the RLS check as that user
-   psql "$CONN_STRING" -c "CREATE ROLE IF NOT EXISTS test_recruiter LOGIN PASSWORD 'testpass'; GRANT CONNECT ON DATABASE postgres TO test_recruiter; GRANT USAGE ON SCHEMA public TO test_recruiter; GRANT SELECT ON ALL TABLES IN SCHEMA public TO test_recruiter;"
+   # Create role if missing (works on more Postgres versions) and grant privileges
+   psql "$CONN_STRING" -c "DO \$\$ BEGIN IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'test_recruiter') THEN CREATE ROLE test_recruiter LOGIN PASSWORD 'testpass'; END IF; END \$\$;"
+   psql "$CONN_STRING" -c "GRANT CONNECT ON DATABASE postgres TO test_recruiter;"
+   psql "$CONN_STRING" -c "GRANT USAGE ON SCHEMA public TO test_recruiter;"
+   psql "$CONN_STRING" -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO test_recruiter;"
+   psql "$CONN_STRING" -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO test_recruiter;"
    CONN_STRING="postgresql://test_recruiter:testpass@127.0.0.1:54322/postgres" npm run rls-test
 
 6. Optional: Open Supabase Studio in a browser to visually inspect tables and rows:

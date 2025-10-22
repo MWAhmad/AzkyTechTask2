@@ -16,13 +16,17 @@ async function run() {
     return res;
   }
 
-  console.log('RLS test: valid org claims (should return rows)');
+  console.log('RLS test: valid org claims (should return rows for org1)');
   const valid = await withClaims('{"sub":"33333333-3333-3333-3333-333333333333","org_id":"11111111-1111-1111-1111-111111111111"}', 'select count(*)::int as cnt from jobs');
   console.log('jobs count for valid org:', valid.rows[0].cnt);
 
   console.log('RLS test: other org claims (should return 0)');
   const invalid = await withClaims('{"sub":"deadbeef-dead-beef-dead-beefdeadbeef","org_id":"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"}', 'select count(*)::int as cnt from jobs');
   console.log('jobs count for other org:', invalid.rows[0].cnt);
+
+  console.log('RLS test: second org claims (should return rows for org2)');
+  const valid2 = await withClaims('{"sub":"44444444-4444-4444-4444-444444444444","org_id":"22222222-1111-2222-1111-222222222222"}', 'select count(*)::int as cnt from jobs');
+  console.log('jobs count for org2:', valid2.rows[0].cnt);
 
   await client.end();
 }
