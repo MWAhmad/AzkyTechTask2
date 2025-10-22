@@ -8,6 +8,7 @@ What I added
 Getting Started (Supabase CLI)
 1) Install Supabase CLI: https://supabase.com/docs/guides/cli
 2) Login and link project: supabase login && supabase link --project-ref <ref>
+3) Install npm packages using 'npm install'
 
 Quick run (automated)
 1. Make the demo script executable (once):
