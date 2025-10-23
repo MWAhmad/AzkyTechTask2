@@ -10,6 +10,8 @@ Getting Started (Supabase CLI)
 2) Login and link project: supabase login && supabase link --project-ref <ref>
 3) Install npm packages using 'npm install'
 
+IMPORTANT: Please make sure you have docker engine (I used docker desktop) running before executing any scripts or commands. Thank you!
+
 Quick run (automated)
 1. Make the demo script executable (once):
    chmod +x scripts/demo.sh
